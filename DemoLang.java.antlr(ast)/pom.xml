@@ -13,7 +13,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>ru.vsu.cs.demolang.Main</mainClass>
+        <mainClass>ru.vsu.cs.jslite.Main</mainClass>
         <project.build.antlrSourceDirectory>${project.basedir}/src/main/java</project.build.antlrSourceDirectory>
         <project.build.generatedSourceDirectory>${project.basedir}/src-gen/main/java</project.build.generatedSourceDirectory>
     </properties>
@@ -39,7 +39,7 @@
                     <visitor>true</visitor>
                     <arguments>
                         <argument>-package</argument>
-                        <argument>ru.vsu.cs.demolang.antlr</argument>
+                        <argument>ru.vsu.cs.jslite.antlr</argument>
                     </arguments>
                 </configuration>
                 <executions>
