@@ -2,17 +2,24 @@ package ru.vsu.cs.jslite;
 
 public class Main {
     public static void main(String[] args) {
-        // Наш тестовый код на JS
-        String sourceCode = "let x = 10 + 5 * 2;\n" +
-                "x = x - 3;";
+        String sourceCode =
+                "let user = { name: \"Ivan\", age: 20 };\n" +
+                        "let marks = [5, 4, 5, 3];\n" +
+                        "\n" +
+                        "function calculateAverage(arr) {\n" +
+                        "    let sum = 0;\n" +
+                        "    for (let i = 0; i < 4; i = i + 1) {\n" +
+                        "        if (arr[i] == null) { break; }\n" +
+                        "        sum = sum + arr[i];\n" +
+                        "    }\n" +
+                        "    return sum / 4;\n" +
+                        "}\n" +
+                        "\n" +
+                        "user.avg = calculateAverage(marks);";
 
-        // Создаем наш парсер-обертку
         Parser parser = new Parser();
-
-        // Получаем готовое дерево
         AstNodes.AstNode ast = parser.parse(sourceCode);
 
-        // Красивый вывод в консоль
         System.out.println("Исходный код:\n" + sourceCode + "\n");
         System.out.println("AST Дерево:");
         if (ast != null) {
