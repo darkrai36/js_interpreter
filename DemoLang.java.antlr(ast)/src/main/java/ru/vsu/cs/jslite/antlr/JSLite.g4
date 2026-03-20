@@ -38,11 +38,13 @@ paramList: IDENTIFIER (',' IDENTIFIER)*;
 returnStmt: 'return' expr?;
 
 // Выражения (с учетом приоритета операций)
-expr: left=expr op=('*' | '/' | 'div' | 'mod' | '%') right=expr  # MulDivExpr
+expr: left=expr '[' right=expr ']'                               # IndexExpr  // arr[0]
+    | left=expr '.' IDENTIFIER                                   # DotExpr    // obj.prop
+    | left=expr op=('*' | '/' | 'div' | 'mod' | '%') right=expr  # MulDivExpr
     | left=expr op=('+' | '-') right=expr                        # AddSubExpr
     | left=expr op=('<' | '<=' | '>' | '>=') right=expr          # RelExpr
     | left=expr op=('==' | '!=') right=expr                      # EqExpr
-    | left=expr '=' right=expr                                   # AssignExpr // Присваивание - тоже выражение
+    | left=expr '=' right=expr                                   # AssignExpr
     | primary                                                    # PrimaryExpr
     ;
 
@@ -52,10 +54,15 @@ primary: NUMBER                   # NumLiteral
        | 'undefined'              # UndefLiteral
        | IDENTIFIER               # IdentLiteral
        | IDENTIFIER '(' argList? ')' # CallFunc
+       | '[' exprList? ']'        # ArrayLiteral
+       | '{' hashList? '}'        # HashLiteral
        | '(' expr ')'             # ParenExpr
        ;
 
 argList: expr (',' expr)*;
+exprList: expr (',' expr)*;
+hashList: hashElement (',' hashElement)*;
+hashElement: (IDENTIFIER | STRING) ':' expr;
 
 // ЛЕКСЕР (Токены)
 NUMBER: [0-9]+ ('.' [0-9]+)?;
