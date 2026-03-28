@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import ru.vsu.cs.jslite.antlr.JSLiteLexer;
 import ru.vsu.cs.jslite.antlr.JSLiteParser;
 
-public class Parser {
+public class    Parser {
 
     // Метод принимает строку с кодом и возвращает корень AST-дерева
     public AstNodes.AstNode parse(String sourceCode) {
