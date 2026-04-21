@@ -1,3 +1,4 @@
+/*
 package ru.vsu.cs.jslite;
 
 import ru.vsu.cs.jslite.semantic.SemanticAnalyzer;
@@ -93,5 +94,25 @@ public class Main {
         } catch (RuntimeException e) {
             System.out.println("FAILED - Semantic errors detected (as expected)");
         }
+    }
+}*/
+package ru.vsu.cs.jslite;
+
+import ru.vsu.cs.jslite.runtime.Interpreter;
+
+public class Main {
+    public static void main(String[] args) {
+        String sourceCode =
+                "let x = 10;\n" +
+                        "const y = 5;\n" +
+                        "x = x + y;\n" +
+                        "y = 20; // ТУТ ДОЛЖНА БЫТЬ ОШИБКА!\n";
+
+        Parser parser = new Parser();
+        AstNodes.AstNode ast = parser.parse(sourceCode);
+
+        System.out.println("Запуск интерпретатора:");
+        Interpreter interpreter = new Interpreter();
+        interpreter.execute(ast);
     }
 }
