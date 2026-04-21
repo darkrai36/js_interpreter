@@ -308,8 +308,8 @@ public class SemanticAnalyzer {
     }
 
     private void visitHash(HashNode node) {
-        for (ExprNode value : node.elements.values()) {
-            traverse(value);
+        for (HashElementNode elem : node.elements) {
+            traverse(elem.value);
         }
     }
 

@@ -115,20 +115,38 @@ public class AstNodes {
         @Override public int getColumn() {return column;}
     }
 
-    public static class HashNode implements ExprNode {
-        public final Map<String, ExprNode> elements;
+    public static class HashElementNode implements AstNode {
+        public final String key;
+        public final ExprNode value;
         private final int line, column;
 
-        public HashNode(Map<String, ExprNode> elements, int line, int column) {
+        public HashElementNode(String key, ExprNode value, int line, int column) {
+            this.key = key;
+            this.value = value;
+            this.line = line;
+            this.column = column;
+        }
+
+        @Override public List<AstNode> getChilds() { return Collections.singletonList(value); }
+        @Override public String toString() { return "Key: " + key; }
+        @Override public int getLine() { return line; }
+        @Override public int getColumn() { return column; }
+    }
+
+    public static class HashNode implements ExprNode {
+        public final List<HashElementNode> elements; // Теперь тут List
+        private final int line, column;
+
+        public HashNode(List<HashElementNode> elements, int line, int column) {
             this.elements = elements;
             this.line = line;
             this.column = column;
         }
 
-        @Override public List<AstNode> getChilds() { return new ArrayList<>(elements.values()); }
-        @Override public String toString() { return "Hash {...} (keys: " + String.join(", ", elements.keySet()) + ")"; }
-        @Override public int getLine() {return line;}
-        @Override public int getColumn() {return column;}
+        @Override public List<AstNode> getChilds() { return new ArrayList<>(elements); }
+        @Override public String toString() { return "Hash {...}"; }
+        @Override public int getLine() { return line; }
+        @Override public int getColumn() { return column; }
     }
 
     // --- ОПЕРАЦИИ ---
@@ -405,5 +423,23 @@ public class AstNodes {
         @Override public String toString() { return "Return"; }
         @Override public int getLine() {return line;}
         @Override public int getColumn() {return column;}
+    }
+
+    public static class AnonFuncNode implements ExprNode {
+        public final List<String> params;
+        public final BlockNode body;
+        private final int line, column;
+
+        public AnonFuncNode(List<String> params, BlockNode body, int line, int column) {
+            this.params = params;
+            this.body = body;
+            this.line = line;
+            this.column = column;
+        }
+
+        @Override public List<AstNode> getChilds() { return Collections.singletonList(body); }
+        @Override public String toString() { return "AnonFunction (" + String.join(", ", params) + ")"; }
+        @Override public int getLine() { return line; }
+        @Override public int getColumn() { return column; }
     }
 }

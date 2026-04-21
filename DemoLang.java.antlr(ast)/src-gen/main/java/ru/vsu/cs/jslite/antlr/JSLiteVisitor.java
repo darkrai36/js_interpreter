@@ -202,6 +202,13 @@ public interface JSLiteVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenExpr(JSLiteParser.ParenExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code AnonFuncExpr}
+	 * labeled alternative in {@link JSLiteParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnonFuncExpr(JSLiteParser.AnonFuncExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link JSLiteParser#argList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

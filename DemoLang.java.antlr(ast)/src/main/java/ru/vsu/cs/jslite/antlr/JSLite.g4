@@ -57,6 +57,7 @@ primary: NUMBER                   # NumLiteral
        | '[' exprList? ']'        # ArrayLiteral
        | '{' hashList? '}'        # HashLiteral
        | '(' expr ')'             # ParenExpr
+       | 'function' '(' paramList? ')' block # AnonFuncExpr
        ;
 
 argList: expr (',' expr)*;

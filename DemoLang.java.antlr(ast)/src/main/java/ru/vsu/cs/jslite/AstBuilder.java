@@ -219,14 +219,17 @@ public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
         int line = ctx.getStart().getLine();
         int column = ctx.getStart().getCharPositionInLine();
 
-        Map<String, AstNodes.ExprNode> map = new LinkedHashMap<>();
+        List<AstNodes.HashElementNode> elements = new ArrayList<>();
         if (ctx.hashList() != null) {
             for (JSLiteParser.HashElementContext hCtx : ctx.hashList().hashElement()) {
+                int elLine = hCtx.getStart().getLine();
+                int elCol = hCtx.getStart().getCharPositionInLine();
                 String key = hCtx.IDENTIFIER() != null ? hCtx.IDENTIFIER().getText() : hCtx.STRING().getText().replace("\"", "").replace("'", "");
-                map.put(key, (AstNodes.ExprNode) visit(hCtx.expr()));
+                AstNodes.ExprNode value = (AstNodes.ExprNode) visit(hCtx.expr());
+                elements.add(new AstNodes.HashElementNode(key, value, elLine, elCol));
             }
         }
-        return new AstNodes.HashNode(map, line, column);
+        return new AstNodes.HashNode(elements, line, column);
     }
 
     // --- ДОСТУП И ФУНКЦИИ ---
@@ -267,6 +270,21 @@ public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
             }
         }
         return new AstNodes.CallNode(funcName, args, line, column);
+    }
+
+    @Override
+    public AstNodes.AstNode visitAnonFuncExpr(JSLiteParser.AnonFuncExprContext ctx) {
+        int line = ctx.getStart().getLine();
+        int column = ctx.getStart().getCharPositionInLine();
+
+        List<String> params = new ArrayList<>();
+        if (ctx.paramList() != null) {
+            for (org.antlr.v4.runtime.tree.TerminalNode id : ctx.paramList().IDENTIFIER()) {
+                params.add(id.getText());
+            }
+        }
+        AstNodes.BlockNode body = (AstNodes.BlockNode) visit(ctx.block());
+        return new AstNodes.AnonFuncNode(params, body, line, column);
     }
 
     @Override
