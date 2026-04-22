@@ -21,18 +21,41 @@ public class Interpreter {
         setupBuiltIns();
     }
 
-    // Здесь позже добавим функции print, read и т.д.
     private void setupBuiltIns() {
-        // Добавляем функцию print()
+        // Функция вывода
         currentEnv.declareConst("print", new JSBuiltInFunction() {
-            @Override
-            public JSValue call(List<JSValue> args) {
+            @Override public JSValue call(List<JSValue> args) {
                 for (int i = 0; i < args.size(); i++) {
                     System.out.print(args.get(i).asString());
                     if (i < args.size() - 1) System.out.print(" ");
                 }
-                System.out.println(); // Перенос строки в конце
+                System.out.println();
                 return JSUndefined.INSTANCE;
+            }
+        }, 0, 0);
+
+        // --- НОВЫЕ ФУНКЦИИ ИЗ ТЗ ---
+
+        // Функция ввода с клавиатуры
+        currentEnv.declareConst("read", new JSBuiltInFunction() {
+            @Override public JSValue call(List<JSValue> args) {
+                java.util.Scanner scanner = new java.util.Scanner(System.in);
+                if (scanner.hasNextLine()) {
+                    return new JSString(scanner.nextLine());
+                }
+                return JSUndefined.INSTANCE;
+            }
+        }, 0, 0);
+
+        // Преобразование строки в число (чтобы с вводом можно было делать математику)
+        currentEnv.declareConst("to_number", new JSBuiltInFunction() {
+            @Override public JSValue call(List<JSValue> args) {
+                if (args.isEmpty()) return new JSNumber(0);
+                try {
+                    return new JSNumber(Double.parseDouble(args.get(0).asString()));
+                } catch (NumberFormatException e) {
+                    throw new RuntimeException("Cannot convert '" + args.get(0).asString() + "' to number");
+                }
             }
         }, 0, 0);
     }
@@ -183,10 +206,20 @@ public class Interpreter {
         try {
             switch (node.op) {
                 case "+": return left.add(right);
-                case "-": return left.sub(right); // (Убедись, что добавил sub в JSValue и JSNumber)
-                case "==": return new JSNumber(left.isEquals(right) ? 1.0 : 0.0); // JS boolean эмулируем числами
+                case "-": return left.sub(right);
                 case "*": return left.mul(right);
-            // Тут добавим *, /, > , < и тд
+                case "/": return left.div(right);
+                case "%":
+                case "mod": return left.mod(right);
+                case "div": // Специфичное целочисленное деление из ТЗ
+                    return new JSNumber(Math.floor(((JSNumber) left).value / ((JSNumber) right).value));
+
+                case "==": return new JSNumber(left.isEquals(right) ? 1.0 : 0.0);
+                case "!=": return new JSNumber(left.isNotEquals(right) ? 1.0 : 0.0);
+                case "<":  return new JSNumber(left.isLess(right) ? 1.0 : 0.0);
+                case "<=": return new JSNumber(left.isLessOrEqual(right) ? 1.0 : 0.0);
+                case ">":  return new JSNumber(left.isGreater(right) ? 1.0 : 0.0);
+                case ">=": return new JSNumber(left.isGreaterOrEqual(right) ? 1.0 : 0.0);
             }
         } catch (RuntimeException e) {
             // Перехватываем ошибки JSValue (например, нельзя вычесть строки) и прикрепляем строку/колонку!
