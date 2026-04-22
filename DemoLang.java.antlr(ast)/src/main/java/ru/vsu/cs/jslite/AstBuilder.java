@@ -258,18 +258,18 @@ public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
     }
 
     @Override
-    public AstNodes.AstNode visitCallFunc(JSLiteParser.CallFuncContext ctx) {
+    public AstNodes.AstNode visitCallExpr(JSLiteParser.CallExprContext ctx) {
         int line = ctx.getStart().getLine();
         int column = ctx.getStart().getCharPositionInLine();
 
-        String funcName = ctx.IDENTIFIER().getText();
+        AstNodes.ExprNode funcExpr = (AstNodes.ExprNode) visit(ctx.left); // Вычисляем "кто" вызывается
         List<AstNodes.ExprNode> args = new ArrayList<>();
         if (ctx.argList() != null) {
             for (JSLiteParser.ExprContext exprCtx : ctx.argList().expr()) {
                 args.add((AstNodes.ExprNode) visit(exprCtx));
             }
         }
-        return new AstNodes.CallNode(funcName, args, line, column);
+        return new AstNodes.CallNode(funcExpr, args, line, column);
     }
 
     @Override

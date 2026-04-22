@@ -372,19 +372,24 @@ public class AstNodes {
     }
 
     public static class CallNode implements ExprNode {
-        public final String funcName;
+        public final ExprNode funcExpr; // Раньше был String funcName
         public final List<ExprNode> args;
         private final int line, column;
 
-        public CallNode(String funcName, List<ExprNode> args, int line, int column) {
-            this.funcName = funcName;
+        public CallNode(ExprNode funcExpr, List<ExprNode> args, int line, int column) {
+            this.funcExpr = funcExpr;
             this.args = args;
             this.line = line;
             this.column = column;
         }
 
-        @Override public List<AstNode> getChilds() { return new ArrayList<>(args); }
-        @Override public String toString() { return "Call: " + funcName + "()"; }
+        @Override public List<AstNode> getChilds() {
+            List<AstNode> childs = new ArrayList<>();
+            childs.add(funcExpr);
+            childs.addAll(args);
+            return childs;
+        }
+        @Override public String toString() { return "Call ()"; }
         @Override public int getLine() {return line;}
         @Override public int getColumn() {return column;}
     }
