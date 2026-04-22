@@ -38,8 +38,9 @@ paramList: IDENTIFIER (',' IDENTIFIER)*;
 returnStmt: 'return' expr?;
 
 // Выражения (с учетом приоритета операций)
-expr: left=expr '[' right=expr ']'                               # IndexExpr  // arr[0]
-    | left=expr '.' IDENTIFIER                                   # DotExpr    // obj.prop
+expr: left=expr '[' right=expr ']'                               # IndexExpr
+    | left=expr '.' IDENTIFIER                                   # DotExpr
+    | left=expr '(' argList? ')'                                 # CallExpr
     | left=expr op=('*' | '/' | 'div' | 'mod' | '%') right=expr  # MulDivExpr
     | left=expr op=('+' | '-') right=expr                        # AddSubExpr
     | left=expr op=('<' | '<=' | '>' | '>=') right=expr          # RelExpr
@@ -53,7 +54,6 @@ primary: NUMBER                   # NumLiteral
        | 'null'                   # NullLiteral
        | 'undefined'              # UndefLiteral
        | IDENTIFIER               # IdentLiteral
-       | IDENTIFIER '(' argList? ')' # CallFunc
        | '[' exprList? ']'        # ArrayLiteral
        | '{' hashList? '}'        # HashLiteral
        | '(' expr ')'             # ParenExpr
