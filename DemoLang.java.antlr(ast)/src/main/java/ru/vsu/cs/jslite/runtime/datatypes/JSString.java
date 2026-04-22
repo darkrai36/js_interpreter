@@ -1,4 +1,4 @@
-package ru.vsu.cs.jslite.runtime;
+package ru.vsu.cs.jslite.runtime.datatypes;
 
 public class JSString extends JSValue {
     public final String value;

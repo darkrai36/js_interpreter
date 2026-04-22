@@ -1,6 +1,6 @@
-package ru.vsu.cs.jslite.runtime;
+package ru.vsu.cs.jslite.runtime.datatypes;
 
-public class JSNumber extends JSValue{
+public class JSNumber extends JSValue {
     public final double value;
 
     public JSNumber(double value) {
@@ -9,10 +9,12 @@ public class JSNumber extends JSValue{
 
     @Override
     public String asString() {
+        // Если число целое (например, 120.0), выводим как "120"
         if (value == (long) value) {
-            return String.format("%d", value);
+            return String.valueOf((long) value);
         }
-        return String.format("%s", value);
+        // Иначе выводим с точкой (например, "120.5")
+        return String.valueOf(value);
     }
 
     @Override
@@ -45,5 +47,13 @@ public class JSNumber extends JSValue{
             return value == ((JSNumber) other).value;
         }
         return false;
+    }
+
+    @Override
+    public JSValue mul(JSValue other) {
+        if (other instanceof JSNumber) {
+            return new JSNumber(this.value * ((JSNumber) other).value);
+        }
+        return super.mul(other);
     }
 }

@@ -1,4 +1,4 @@
-package ru.vsu.cs.jslite.runtime;
+package ru.vsu.cs.jslite.runtime.exceptions;
 
 public class JSRuntimeException extends RuntimeException {
     public JSRuntimeException(String message, int line, int column) {

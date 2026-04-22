@@ -1,4 +1,4 @@
-package ru.vsu.cs.jslite.runtime;
+package ru.vsu.cs.jslite.runtime.datatypes;
 
 public class JSUndefined extends JSValue {
     public static final JSUndefined INSTANCE = new JSUndefined();

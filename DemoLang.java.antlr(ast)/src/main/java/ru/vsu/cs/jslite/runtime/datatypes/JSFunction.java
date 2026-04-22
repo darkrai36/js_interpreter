@@ -1,6 +1,7 @@
-package ru.vsu.cs.jslite.runtime;
+package ru.vsu.cs.jslite.runtime.datatypes;
 
 import ru.vsu.cs.jslite.AstNodes;
+import ru.vsu.cs.jslite.runtime.Environment;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class JSFunction extends JSValue {
 
     @Override
     public String asString() {
-        return "[Functrion]";
+        return "[Function]";
     }
 
     @Override
