@@ -1,15 +1,11 @@
 package ru.vsu.cs.jslite.runtime;
 
-import ru.vsu.cs.jslite.semantic.SemanticException;
-import ru.vsu.cs.jslite.semantic.Symbol;
+import ru.vsu.cs.jslite.runtime.datatypes.JSValue;
+import ru.vsu.cs.jslite.runtime.exceptions.JSRuntimeException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Lớp quản lý phạm vi (scope) cho các biến và hàm
- * Hỗ trợ phạm vi lồng nhau
- */
 public class Environment {
     private static class Record {
         JSValue value;
