@@ -98,6 +98,14 @@ public class Main {
 }*//*
 */
 /*
+*//*
+
+*/
+/*
+
+*//*
+*/
+/*
 
 *//*
 
@@ -123,6 +131,10 @@ public class Main {
         interpreter.execute(ast);
     }
 }*//*
+*/
+/*
+*//*
+
 */
 /*
 
@@ -156,6 +168,8 @@ public class Main {
         System.out.println("Успешно завершено!");
     }
 }*//*
+*/
+/*
 
 package ru.vsu.cs.jslite;
 
@@ -182,7 +196,8 @@ public class Main {
         Interpreter interpreter = new Interpreter();
         interpreter.execute(ast);
     }
-}*/
+}*//*
+
 package ru.vsu.cs.jslite;
 
 import ru.vsu.cs.jslite.runtime.Interpreter;
@@ -204,6 +219,38 @@ public class Main {
                         "print(\"Пользователь:\", user);\n" +
                         "print(\"Оценки:\", user.getGrades());\n" +
                         "print(\"Первая оценка:\", user.getGrades()[0]);\n";
+
+        Parser parser = new Parser();
+        AstNodes.AstNode ast = parser.parse(sourceCode);
+
+        System.out.println("--- ЗАПУСК ИНТЕРПРЕТАТОРА ---");
+        Interpreter interpreter = new Interpreter();
+        interpreter.execute(ast);
+    }
+}
+*/
+package ru.vsu.cs.jslite;
+
+import ru.vsu.cs.jslite.runtime.Interpreter;
+
+public class Main {
+    public static void main(String[] args) {
+        // Программа здоровается, просит ввести возраст и считает логику!
+        String sourceCode =
+                "print(\"Как тебя зовут?\");\n" +
+                        "let name = read();\n" +
+                        "print(\"Привет,\", name, \"! Введи свой год рождения:\");\n" +
+                        "let year = to_number(read());\n" +
+                        "\n" +
+                        "let age = 2026 - year;\n" +
+                        "print(\"Тебе примерно\", age, \"лет.\");\n" +
+                        "\n" +
+                        "if (age >= 18) {\n" +
+                        "    print(\"Ты совершеннолетний!\");\n" +
+                        "} else {\n" +
+                        "    print(\"Тебе еще рано.\");\n" +
+                        "}\n" +
+                        "print(\"Проверка деления: 10 div 3 =\", 10 div 3);\n";
 
         Parser parser = new Parser();
         AstNodes.AstNode ast = parser.parse(sourceCode);
