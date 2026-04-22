@@ -95,7 +95,14 @@ public class Main {
             System.out.println("FAILED - Semantic errors detected (as expected)");
         }
     }
-}*/
+}*//*
+*/
+/*
+
+*//*
+
+*/
+/*
 package ru.vsu.cs.jslite;
 
 import ru.vsu.cs.jslite.runtime.Interpreter;
@@ -112,6 +119,96 @@ public class Main {
         AstNodes.AstNode ast = parser.parse(sourceCode);
 
         System.out.println("Запуск интерпретатора:");
+        Interpreter interpreter = new Interpreter();
+        interpreter.execute(ast);
+    }
+}*//*
+*/
+/*
+
+package ru.vsu.cs.jslite;
+
+import ru.vsu.cs.jslite.runtime.Interpreter;
+
+public class Main {
+    public static void main(String[] args) {
+        String sourceCode =
+                "function factorial(n) {\n" +
+                        "    if (n == 0) {\n" +
+                        "        return 1;\n" +
+                        "    }\n" +
+                        "    return n * factorial(n - 1);\n" +
+                        "}\n" +
+                        "\n" +
+                        "let result = factorial(5);\n" +
+                        "// Так как функции print у нас пока нет, мы не можем вывести результат.\n" +
+                        "// Но если интерпретатор не упал - он посчитал 120 в памяти!\n";
+
+        Parser parser = new Parser();
+        AstNodes.AstNode ast = parser.parse(sourceCode);
+
+        // Чтобы умножение работало, убедись, что в JSNumber ты добавил метод mul!
+        // (аналогично add и sub)
+
+        System.out.println("Запуск интерпретатора...");
+        Interpreter interpreter = new Interpreter();
+        interpreter.execute(ast);
+        System.out.println("Успешно завершено!");
+    }
+}*//*
+
+package ru.vsu.cs.jslite;
+
+import ru.vsu.cs.jslite.runtime.Interpreter;
+
+public class Main {
+    public static void main(String[] args) {
+        String sourceCode =
+                "function factorial(n) {\n" +
+                        "    if (n == 0) {\n" +
+                        "        return 1;\n" +
+                        "    }\n" +
+                        "    return n * factorial(n - 1);\n" +
+                        "}\n" +
+                        "\n" +
+                        "let result = factorial(5);\n" +
+                        "print(\"Факториал 5 равен:\", result);\n" +
+                        "print(\"А факториал 10 равен:\", factorial(10));\n";
+
+        Parser parser = new Parser();
+        AstNodes.AstNode ast = parser.parse(sourceCode);
+
+        System.out.println("--- ЗАПУСК ИНТЕРПРЕТАТОРА ---");
+        Interpreter interpreter = new Interpreter();
+        interpreter.execute(ast);
+    }
+}*/
+package ru.vsu.cs.jslite;
+
+import ru.vsu.cs.jslite.runtime.Interpreter;
+
+public class Main {
+    public static void main(String[] args) {
+        String sourceCode =
+                "let marks = [5, 4, 3];\n" +
+                        "marks[3] = 5; // Динамическое расширение массива\n" +
+                        "\n" +
+                        "let user = {\n" +
+                        "    name: \"Ivan\",\n" +
+                        "    age: 20,\n" +
+                        "    getGrades: function() { return marks; }\n" + // Функция внутри объекта!
+                        "};\n" +
+                        "\n" +
+                        "user.group = \"CS-1\"; // Добавляем новое свойство\n" +
+                        "\n" +
+                        "print(\"Пользователь:\", user);\n" +
+                        "print(\"Оценки:\", user.getGrades());\n" +
+                        "print(\"Первая оценка:\", user.getGrades()[0]);\n";
+
+        Parser parser = new Parser();
+        AstNodes.AstNode ast = parser.parse(sourceCode);
+
+        System.out.println("--- ЗАПУСК ИНТЕРПРЕТАТОРА ---");
         Interpreter interpreter = new Interpreter();
         interpreter.execute(ast);
     }
