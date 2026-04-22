@@ -42,6 +42,30 @@ public class JSNumber extends JSValue {
     }
 
     @Override
+    public JSValue mul(JSValue other) {
+        if (other instanceof JSNumber) {
+            return new JSNumber(this.value * ((JSNumber) other).value);
+        }
+        return super.mul(other);
+    }
+
+    @Override
+    public JSValue div(JSValue other) {
+        if (other instanceof JSNumber) {
+            return new JSNumber(this.value / ((JSNumber) other).value);
+        }
+        return super.div(other);
+    }
+
+    @Override
+    public JSValue mod(JSValue other) {
+        if (other instanceof JSNumber) {
+            return new JSNumber(this.value % ((JSNumber) other).value);
+        }
+        return super.mod(other);
+    }
+
+    @Override
     public boolean isEquals(JSValue other) {
         if (other instanceof JSNumber) {
             return value == ((JSNumber) other).value;
@@ -50,10 +74,34 @@ public class JSNumber extends JSValue {
     }
 
     @Override
-    public JSValue mul(JSValue other) {
+    public boolean isLess(JSValue other) {
         if (other instanceof JSNumber) {
-            return new JSNumber(this.value * ((JSNumber) other).value);
+            return value < ((JSNumber) other).value;
         }
-        return super.mul(other);
+        return super.isLess(other);
+    }
+
+    @Override
+    public boolean isGreater(JSValue other) {
+        if (other instanceof JSNumber) {
+            return value > ((JSNumber) other).value;
+        }
+        return super.isGreater(other);
+    }
+
+    @Override
+    public boolean isLessOrEqual(JSValue other) {
+        if (other instanceof JSNumber) {
+            return value <= ((JSNumber) other).value;
+        }
+        return super.isLessOrEqual(other);
+    }
+
+    @Override
+    public boolean isGreaterOrEqual(JSValue other) {
+        if (other instanceof JSNumber) {
+            return value >= ((JSNumber) other).value;
+        }
+        return super.isGreaterOrEqual(other);
     }
 }
