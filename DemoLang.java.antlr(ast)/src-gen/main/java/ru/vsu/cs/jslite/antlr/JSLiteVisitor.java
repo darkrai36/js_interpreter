@@ -111,6 +111,13 @@ public interface JSLiteVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimaryExpr(JSLiteParser.PrimaryExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code CallExpr}
+	 * labeled alternative in {@link JSLiteParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallExpr(JSLiteParser.CallExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code DotExpr}
 	 * labeled alternative in {@link JSLiteParser#expr}.
 	 * @param ctx the parse tree
@@ -173,13 +180,6 @@ public interface JSLiteVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIdentLiteral(JSLiteParser.IdentLiteralContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CallFunc}
-	 * labeled alternative in {@link JSLiteParser#primary}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCallFunc(JSLiteParser.CallFuncContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArrayLiteral}
 	 * labeled alternative in {@link JSLiteParser#primary}.
