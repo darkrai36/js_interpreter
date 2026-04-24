@@ -120,8 +120,13 @@ public class InterpreterTest {
                         "print(10 > 5);" +
                         "print(3 < 8);";
 
-        String output = runCode(code);
-        assertTrue(output.contains("1.0"));
+        String output = runCode(code).trim();
+        String[] lines = output.split("\\r?\\n"); //each output line
+
+        assertEquals(4, lines.length, "Output lines don't match");
+        for (String line : lines) {
+            assertEquals("True", line.trim());
+        }
     }
 
     // LOOPS

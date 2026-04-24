@@ -64,7 +64,7 @@ public class Interpreter {
     public void execute(AstNode root) {
         try {
             eval(root);
-            System.out.println("Program executed successfully.");
+//            System.out.println("Program executed successfully.");
         } catch (JSRuntimeException e) {
             System.err.println(e.getMessage());
         }
@@ -214,12 +214,12 @@ public class Interpreter {
                 case "div": // Специфичное целочисленное деление из ТЗ
                     return new JSNumber(Math.floor(((JSNumber) left).value / ((JSNumber) right).value));
 
-                case "==": return new JSNumber(left.isEquals(right) ? 1.0 : 0.0);
-                case "!=": return new JSNumber(left.isNotEquals(right) ? 1.0 : 0.0);
-                case "<":  return new JSNumber(left.isLess(right) ? 1.0 : 0.0);
-                case "<=": return new JSNumber(left.isLessOrEqual(right) ? 1.0 : 0.0);
-                case ">":  return new JSNumber(left.isGreater(right) ? 1.0 : 0.0);
-                case ">=": return new JSNumber(left.isGreaterOrEqual(right) ? 1.0 : 0.0);
+                case "==": return new JSString(left.isEquals(right) ? "True" : "False");
+                case "!=": return new JSString(left.isNotEquals(right) ? "True" : "False");
+                case "<":  return new JSString(left.isLess(right) ? "True" : "False");
+                case "<=": return new JSString(left.isLessOrEqual(right) ? "True" : "False");
+                case ">":  return new JSString(left.isGreater(right) ? "True" : "False");
+                case ">=": return new JSString(left.isGreaterOrEqual(right) ? "True" : "False");
             }
         } catch (RuntimeException e) {
             // Перехватываем ошибки JSValue (например, нельзя вычесть строки) и прикрепляем строку/колонку!
