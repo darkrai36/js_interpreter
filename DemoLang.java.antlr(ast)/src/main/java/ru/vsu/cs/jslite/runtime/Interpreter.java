@@ -62,12 +62,7 @@ public class Interpreter {
 
     // Главный метод выполнения, запускающий обход!
     public void execute(AstNode root) {
-        try {
-            eval(root);
-//            System.out.println("Program executed successfully.");
-        } catch (JSRuntimeException e) {
-            System.err.println(e.getMessage());
-        }
+        eval(root);
     }
 
     // Вместо traverse(void), теперь eval(JSValue)
@@ -214,12 +209,12 @@ public class Interpreter {
                 case "div": // Специфичное целочисленное деление из ТЗ
                     return new JSNumber(Math.floor(((JSNumber) left).value / ((JSNumber) right).value));
 
-                case "==": return new JSString(left.isEquals(right) ? "True" : "False");
-                case "!=": return new JSString(left.isNotEquals(right) ? "True" : "False");
-                case "<":  return new JSString(left.isLess(right) ? "True" : "False");
-                case "<=": return new JSString(left.isLessOrEqual(right) ? "True" : "False");
-                case ">":  return new JSString(left.isGreater(right) ? "True" : "False");
-                case ">=": return new JSString(left.isGreaterOrEqual(right) ? "True" : "False");
+                case "==": return new JSBoolean(left.isEquals(right));
+                case "!=": return new JSBoolean(left.isNotEquals(right));
+                case "<":  return new JSBoolean(left.isLess(right));
+                case "<=": return new JSBoolean(left.isLessOrEqual(right));
+                case ">":  return new JSBoolean(left.isGreater(right));
+                case ">=": return new JSBoolean(left.isGreaterOrEqual(right));
             }
         } catch (RuntimeException e) {
             // Перехватываем ошибки JSValue (например, нельзя вычесть строки) и прикрепляем строку/колонку!

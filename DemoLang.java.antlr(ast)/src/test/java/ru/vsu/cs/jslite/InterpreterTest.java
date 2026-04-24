@@ -125,7 +125,7 @@ public class InterpreterTest {
 
         assertEquals(4, lines.length, "Output lines don't match");
         for (String line : lines) {
-            assertEquals("True", line.trim());
+            assertEquals("true", line.trim());
         }
     }
 
@@ -144,6 +144,7 @@ public class InterpreterTest {
         assertTrue(output.contains("0"));
         assertTrue(output.contains("1"));
         assertTrue(output.contains("2"));
+        assertFalse(output.contains("3"));
     }
 
     @Test

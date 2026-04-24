@@ -232,6 +232,7 @@ public class Main {
 package ru.vsu.cs.jslite;
 
 import ru.vsu.cs.jslite.runtime.Interpreter;
+import ru.vsu.cs.jslite.runtime.exceptions.JSRuntimeException;
 
 public class Main {
     public static void main(String[] args) {
@@ -256,7 +257,11 @@ public class Main {
         AstNodes.AstNode ast = parser.parse(sourceCode);
 
         System.out.println("--- ЗАПУСК ИНТЕРПРЕТАТОРА ---");
-        Interpreter interpreter = new Interpreter();
-        interpreter.execute(ast);
+        try {
+            Interpreter interpreter = new Interpreter();
+            interpreter.execute(ast);
+        } catch (JSRuntimeException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
