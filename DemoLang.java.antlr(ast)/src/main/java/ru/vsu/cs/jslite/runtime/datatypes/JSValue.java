@@ -23,9 +23,7 @@ public abstract class JSValue {
     }
 
     // операции сравнения (==, !=, >, <, >=, <=)
-    public boolean isEquals(JSValue other) {
-        return this == other;
-    }
+    public boolean isEquals(JSValue other) { return this == other; }
     public boolean isNotEquals(JSValue other) { return !isEquals(other); }
     public boolean isLess(JSValue other) { throw new RuntimeException("Runtime Error: Cannot compare values of this type."); }
     public boolean isLessOrEqual(JSValue other) { throw new RuntimeException("Runtime Error: Cannot compare values of this type."); }
