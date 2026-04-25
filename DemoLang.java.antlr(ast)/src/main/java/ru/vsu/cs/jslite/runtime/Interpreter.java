@@ -3,6 +3,7 @@ package ru.vsu.cs.jslite.runtime;
 import ru.vsu.cs.jslite.AstNodes;
 import ru.vsu.cs.jslite.AstNodes.*;
 import ru.vsu.cs.jslite.runtime.datatypes.*;
+import ru.vsu.cs.jslite.runtime.exceptions.JSBreak;
 import ru.vsu.cs.jslite.runtime.exceptions.JSContinue;
 import ru.vsu.cs.jslite.runtime.exceptions.JSReturn;
 import ru.vsu.cs.jslite.runtime.exceptions.JSRuntimeException;
