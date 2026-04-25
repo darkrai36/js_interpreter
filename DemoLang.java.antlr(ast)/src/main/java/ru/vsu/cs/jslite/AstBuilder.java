@@ -3,9 +3,7 @@ package ru.vsu.cs.jslite;
 import ru.vsu.cs.jslite.antlr.JSLiteBaseVisitor;
 import ru.vsu.cs.jslite.antlr.JSLiteParser;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
 
