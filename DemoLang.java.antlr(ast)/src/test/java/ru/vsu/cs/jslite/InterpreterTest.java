@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import ru.vsu.cs.jslite.Parser;
-import ru.vsu.cs.jslite.AstNodes;
 import ru.vsu.cs.jslite.runtime.Interpreter;
 
 import java.io.ByteArrayOutputStream;
@@ -242,10 +240,13 @@ public class InterpreterTest {
         String code =
                 "let arr = [1, 2, 3];" +
                         "arr[1] = 99;" +
-                        "print(arr[1]);";
+                        "arr[4] = 785;" +
+                        "print(arr[1]);" +
+                        "print(arr[4]);";
 
         String output = runCode(code);
         assertTrue(output.contains("99"));
+        assertTrue(output.contains("785"));
     }
 
     // OBJECT
