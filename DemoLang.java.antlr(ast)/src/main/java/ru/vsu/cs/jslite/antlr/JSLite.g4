@@ -1,6 +1,5 @@
 grammar JSLite;
 
-// Точка входа
 program: stmtList EOF;
 
 stmtList: stmt*;
@@ -15,12 +14,11 @@ stmt: block
     | returnStmt ';'
     | 'break' ';'
     | 'continue' ';'
-    | ';' // пустой оператор
+    | ';'
     ;
 
 block: '{' stmtList '}';
 
-// В JS переменные объявляются через let, var или const
 varDecl: ('let' | 'var' | 'const') IDENTIFIER ('=' expr)?;
 
 exprStmt: expr;
@@ -37,7 +35,6 @@ paramList: IDENTIFIER (',' IDENTIFIER)*;
 
 returnStmt: 'return' expr?;
 
-// Выражения (с учетом приоритета операций)
 expr: left=expr '[' right=expr ']'                               # IndexExpr
     | left=expr '.' IDENTIFIER                                   # DotExpr
     | left=expr '(' argList? ')'                                 # CallExpr
@@ -65,7 +62,6 @@ exprList: expr (',' expr)*;
 hashList: hashElement (',' hashElement)*;
 hashElement: (IDENTIFIER | STRING) ':' expr;
 
-// ЛЕКСЕР (Токены)
 NUMBER: [0-9]+ ('.' [0-9]+)?;
 STRING: '"' (~["\\] | '\\' .)* '"' | '\'' (~['\\] | '\\' .)* '\'';
 IDENTIFIER: [a-zA-Z_$] [a-zA-Z0-9_$]*;
