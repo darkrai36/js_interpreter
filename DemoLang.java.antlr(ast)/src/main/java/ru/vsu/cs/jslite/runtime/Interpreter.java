@@ -264,6 +264,16 @@ public class Interpreter {
         JSValue objVal = eval(node.obj);
         if (objVal instanceof JSObject) {
             return ((JSObject) objVal).properties.getOrDefault(node.prop, JSUndefined.INSTANCE);
+        } else if (objVal instanceof JSArray) {
+            if ("length".equals(node.prop)) {
+                return new JSNumber(((JSArray) objVal).elements.size());
+            }
+            return JSUndefined.INSTANCE;
+        } else if (objVal instanceof JSString) {
+            if ("length".equals(node.prop)) {
+                return new JSNumber(((JSString) objVal).value.length());
+            }
+            return JSUndefined.INSTANCE;
         }
         throw new JSRuntimeException("Cannot read property '" + node.prop + "' of undefined", node.getLine(), node.getColumn());
     }
@@ -339,6 +349,19 @@ public class Interpreter {
     }
 
     private JSValue visitCall(CallNode node) {
+        // support .push() for array
+        if (node.funcExpr instanceof DotNode) {
+            DotNode dot = (DotNode) node.funcExpr;
+            JSValue obj = eval(dot.obj);
+            if (obj instanceof JSArray && "push".equals(dot.prop)) {
+                List<JSValue> args = new ArrayList<>();
+                for (ExprNode arg : node.args) {
+                    args.add(eval(arg));
+                }
+                ((JSArray) obj).elements.addAll(args);
+                return new JSNumber(((JSArray) obj).elements.size());
+            }
+        }
         // 1. Вычисляем то, что мы пытаемся вызвать (например, user.getGrades)
         JSValue funcVal = eval(node.funcExpr);
 
