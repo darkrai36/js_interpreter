@@ -1,5 +1,6 @@
 package ru.vsu.cs.jslite.runtime;
 
+import ru.vsu.cs.jslite.runtime.datatypes.JSUndefined;
 import ru.vsu.cs.jslite.runtime.datatypes.JSValue;
 import ru.vsu.cs.jslite.runtime.exceptions.JSRuntimeException;
 
@@ -15,10 +16,22 @@ public class Environment {
     private final Map<String, Record> variables = new HashMap<>();
     private final Environment parent;
     private final boolean isFunctionScope;
+    private JSValue thisValue = JSUndefined.INSTANCE;
 
     public Environment(Environment parent, boolean isFunctionScope) {
         this.parent = parent;
         this.isFunctionScope = isFunctionScope;
+    }
+
+    public void setThisValue(JSValue value) {
+        this.thisValue = value;
+    }
+
+    public JSValue getThisValue() {
+        if (thisValue != JSUndefined.INSTANCE || parent == null) {
+            return thisValue;
+        }
+        return parent.getThisValue();
     }
 
     public void declareLet(String name, JSValue value, int line, int col) {

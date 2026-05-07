@@ -1,0 +1,41 @@
+let counter = {
+    value: 0,
+    inc: function() {
+        this.value = this.value + 1;
+        return this;
+    },
+    dec: function() {
+        this.value = this.value - 1;
+        return this;
+    },
+    add: function(n) {
+        this.value = this.value + n;
+        return this;
+    },
+    getValue: function() {
+        return this.value;
+    },
+    reset: function() {
+        this.value = 0;
+    }
+};
+
+print("After inc:");
+counter.inc();
+print(counter.getValue()); // 1
+
+print("After inc().inc():");
+counter.inc().inc();
+print(counter.getValue()); // 3
+
+print("After add(7):");
+counter.add(7);
+print(counter.getValue()); // 10
+
+print("After dec():");
+counter.dec();
+print(counter.getValue()); // 9
+
+counter.reset();
+print("After reset:");
+print(counter.getValue()); // 0

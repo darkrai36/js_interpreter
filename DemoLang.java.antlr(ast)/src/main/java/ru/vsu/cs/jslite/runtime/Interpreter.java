@@ -72,6 +72,7 @@ public class Interpreter {
 
         if (node instanceof ProgramNode) return visitProgram((ProgramNode) node);
         if (node instanceof BlockNode) return visitBlock((BlockNode) node);
+        if (node instanceof ThisNode) { return currentEnv.getThisValue();}
         if (node instanceof VarDeclNode) return visitVarDecl((VarDeclNode) node);
         if (node instanceof AssignNode) return visitAssign((AssignNode) node);
         if (node instanceof ExprStmtNode) return visitExprStmt((ExprStmtNode) node);
@@ -382,8 +383,21 @@ public class Interpreter {
         }
         JSFunction func = (JSFunction) funcVal;
 
+        JSValue thisValue;
+        if (node.funcExpr instanceof DotNode) {
+            DotNode dot = (DotNode) node.funcExpr;
+            thisValue = eval(dot.obj);                // obj.method() => this = obj
+        } else if (node.funcExpr instanceof IndexNode) {
+            IndexNode idxNode = (IndexNode) node.funcExpr;
+            thisValue = eval(idxNode.array);          // obj['method']() => this = obj
+        } else {
+            thisValue = JSUndefined.INSTANCE;         // function() normal
+        }
+
         // 3. Создаем область памяти вызова и привязываем параметры
         Environment funcEnv = new Environment(func.closure, true);
+        funcEnv.setThisValue(thisValue);
+
         for (int i = 0; i < func.params.size(); i++) {
             JSValue val = (i < argValues.size()) ? argValues.get(i) : JSUndefined.INSTANCE;
             funcEnv.declareLet(func.params.get(i), val, node.getLine(), node.getColumn());

@@ -174,6 +174,13 @@ public interface JSLiteVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUndefLiteral(JSLiteParser.UndefLiteralContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code thisLiteral}
+	 * labeled alternative in {@link JSLiteParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitThisLiteral(JSLiteParser.ThisLiteralContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code IdentLiteral}
 	 * labeled alternative in {@link JSLiteParser#primary}.
 	 * @param ctx the parse tree

@@ -50,6 +50,7 @@ primary: NUMBER                   # NumLiteral
        | STRING                   # StringLiteral
        | 'null'                   # NullLiteral
        | 'undefined'              # UndefLiteral
+       | THIS                     # thisLiteral
        | IDENTIFIER               # IdentLiteral
        | '[' exprList? ']'        # ArrayLiteral
        | '{' hashList? '}'        # HashLiteral
@@ -64,6 +65,7 @@ hashElement: (IDENTIFIER | STRING) ':' expr;
 
 NUMBER: [0-9]+ ('.' [0-9]+)?;
 STRING: '"' (~["\\] | '\\' .)* '"' | '\'' (~['\\] | '\\' .)* '\'';
+THIS : 'this' ;
 IDENTIFIER: [a-zA-Z_$] [a-zA-Z0-9_$]*;
 
 COMMENT: '/*' .*? '*/' -> skip;

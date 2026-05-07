@@ -199,6 +199,13 @@ public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
     }
 
     @Override
+    public AstNodes.AstNode visitThisLiteral(JSLiteParser.ThisLiteralContext ctx) {
+        int line = ctx.getStart().getLine();
+        int column = ctx.getStart().getCharPositionInLine();
+        return new AstNodes.ThisNode(line, column);
+    }
+
+    @Override
     public AstNodes.AstNode visitArrayLiteral(JSLiteParser.ArrayLiteralContext ctx) {
         int line = ctx.getStart().getLine();
         int column = ctx.getStart().getCharPositionInLine();

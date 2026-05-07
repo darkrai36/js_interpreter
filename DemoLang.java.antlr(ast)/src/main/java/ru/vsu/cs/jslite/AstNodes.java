@@ -99,6 +99,17 @@ public class AstNodes {
         @Override public int getColumn() {return column;}
     }
 
+    public static class ThisNode implements ExprNode {
+        private final int line, column;
+        public ThisNode(int line, int column) {
+            this.line = line;
+            this.column = column;
+        }
+        @Override public String toString() { return "this"; }
+        @Override public int getLine() { return line; }
+        @Override public int getColumn() { return column; }
+    }
+
     public static class ArrayNode implements ExprNode {
         public final List<ExprNode> elements;
         private final int line, column;
