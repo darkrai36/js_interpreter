@@ -1,4 +1,0 @@
-print("Hello from text file!");
-let x = 10;
-let y = 20;
-print("Result:", x + y);

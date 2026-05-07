@@ -350,51 +350,81 @@ public class Interpreter {
     }
 
     private JSValue visitCall(CallNode node) {
-        // support .push() for array
+        JSValue funcVal;
+        JSValue thisValue = JSUndefined.INSTANCE;
+
         if (node.funcExpr instanceof DotNode) {
             DotNode dot = (DotNode) node.funcExpr;
-            JSValue obj = eval(dot.obj);
+            JSValue obj = eval(dot.obj);          // eval original obj once only
+
+            // built-in array.push()
             if (obj instanceof JSArray && "push".equals(dot.prop)) {
-                List<JSValue> args = new ArrayList<>();
+                List<JSValue> pushArgs = new ArrayList<>();
                 for (ExprNode arg : node.args) {
-                    args.add(eval(arg));
+                    pushArgs.add(eval(arg));
                 }
-                ((JSArray) obj).elements.addAll(args);
+                ((JSArray) obj).elements.addAll(pushArgs);
                 return new JSNumber(((JSArray) obj).elements.size());
             }
-        }
-        // 1. Вычисляем то, что мы пытаемся вызвать (например, user.getGrades)
-        JSValue funcVal = eval(node.funcExpr);
 
-        // 2. Вычисляем аргументы
+            thisValue = obj;
+
+            // takes value from obj (instead of calling visitDot)
+            if (obj instanceof JSObject) {
+                funcVal = ((JSObject) obj).properties.getOrDefault(dot.prop, JSUndefined.INSTANCE);
+            } else if (obj instanceof JSArray && "length".equals(dot.prop)) {
+                funcVal = new JSNumber(((JSArray) obj).elements.size());
+            } else if (obj instanceof JSString && "length".equals(dot.prop)) {
+                funcVal = new JSNumber(((JSString) obj).value.length());
+            } else {
+                throw new JSRuntimeException(
+                        "Cannot read property '" + dot.prop + "' of undefined",
+                        node.getLine(), node.getColumn()
+                );
+            }
+        } else if (node.funcExpr instanceof IndexNode) {
+            IndexNode idx = (IndexNode) node.funcExpr;
+            JSValue obj = eval(idx.array);
+            thisValue = obj;
+            JSValue indexVal = eval(idx.index);
+
+            if (obj instanceof JSArray) {
+                int i = (int) ((JSNumber) indexVal).value;
+                funcVal = ((JSArray) obj).elements.get(i);
+            } else if (obj instanceof JSObject) {
+                funcVal = ((JSObject) obj).properties.getOrDefault(
+                        indexVal.asString(), JSUndefined.INSTANCE
+                );
+            } else {
+                throw new JSRuntimeException(
+                        "Cannot read properties of undefined",
+                        node.getLine(), node.getColumn()
+                );
+            }
+        } else {
+            // calling normal functions
+            funcVal = eval(node.funcExpr);
+        }
+
         List<JSValue> argValues = new ArrayList<>();
         for (ExprNode arg : node.args) {
             argValues.add(eval(arg));
         }
 
-        // --- Встроенные функции (print) ---
+        // call built-in function
         if (funcVal instanceof JSBuiltInFunction) {
             return ((JSBuiltInFunction) funcVal).call(argValues);
         }
 
-        // --- Пользовательские функции ---
+        // call user-defined function
         if (!(funcVal instanceof JSFunction)) {
-            throw new JSRuntimeException("Expression is not a function", node.getLine(), node.getColumn());
+            throw new JSRuntimeException(
+                    "Expression is not a function",
+                    node.getLine(), node.getColumn()
+            );
         }
         JSFunction func = (JSFunction) funcVal;
 
-        JSValue thisValue;
-        if (node.funcExpr instanceof DotNode) {
-            DotNode dot = (DotNode) node.funcExpr;
-            thisValue = eval(dot.obj);                // obj.method() => this = obj
-        } else if (node.funcExpr instanceof IndexNode) {
-            IndexNode idxNode = (IndexNode) node.funcExpr;
-            thisValue = eval(idxNode.array);          // obj['method']() => this = obj
-        } else {
-            thisValue = JSUndefined.INSTANCE;         // function() normal
-        }
-
-        // 3. Создаем область памяти вызова и привязываем параметры
         Environment funcEnv = new Environment(func.closure, true);
         funcEnv.setThisValue(thisValue);
 
@@ -403,7 +433,6 @@ public class Interpreter {
             funcEnv.declareLet(func.params.get(i), val, node.getLine(), node.getColumn());
         }
 
-        // 4. Выполняем тело функции
         Environment oldEnv = currentEnv;
         currentEnv = funcEnv;
         try {
@@ -413,7 +442,6 @@ public class Interpreter {
         } finally {
             currentEnv = oldEnv;
         }
-
         return JSUndefined.INSTANCE;
     }
 
