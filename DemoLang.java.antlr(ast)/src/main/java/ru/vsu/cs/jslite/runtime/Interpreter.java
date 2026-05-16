@@ -15,10 +15,12 @@ import java.util.Map;
 
 public class Interpreter {
     private Environment currentEnv;
+    private final JSObject globalThis;
 
     public Interpreter() {
         // Создаем глобальный scope (он является функцией/корнем по умолчанию)
         this.currentEnv = new Environment(null, true);
+        this.globalThis = new JSObject(new LinkedHashMap<>());
         setupBuiltIns();
     }
 
@@ -404,6 +406,7 @@ public class Interpreter {
         } else {
             // calling normal functions
             funcVal = eval(node.funcExpr);
+            thisValue = globalThis;
         }
 
         List<JSValue> argValues = new ArrayList<>();
