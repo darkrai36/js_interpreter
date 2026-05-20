@@ -1,0 +1,34 @@
+function drawTriangle(h) {
+    if (h < 2) {
+        return "The height must be >= 2";
+    }
+
+    let result = "";
+
+    result = result + "*";
+    let i = 0;
+    while (i < h - 1) {
+        result = result + "-";
+        i = i + 1;
+    }
+    result = result + "*\n";
+
+    let row = 2;
+    while (row < h) {
+        result = result + "|";
+        let soDash = h - row;
+        let j = 0;
+        while (j < soDash) {
+            result = result + "-";
+            j = j + 1;
+        }
+        result = result + "/\n";
+        row = row + 1;
+    }
+
+    result = result + "*";
+    return result;
+}
+
+print(drawTriangle(8));
+print(drawTriangle(5));
