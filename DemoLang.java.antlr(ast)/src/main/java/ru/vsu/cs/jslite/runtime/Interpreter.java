@@ -29,15 +29,18 @@ public class Interpreter {
         currentEnv.declareConst("print", new JSBuiltInFunction() {
             @Override public JSValue call(List<JSValue> args) {
                 for (int i = 0; i < args.size(); i++) {
-                    System.out.print(args.get(i).asString());
+                    String s = args.get(i).asString();
+                    // Thay thế escape sequence khi in
+                    s = s.replace("\\n", "\n")
+                            .replace("\\t", "\t")
+                            .replace("\\r", "\r");
+                    System.out.print(s);
                     if (i < args.size() - 1) System.out.print(" ");
                 }
                 System.out.println();
                 return JSUndefined.INSTANCE;
             }
         }, 0, 0);
-
-        // --- НОВЫЕ ФУНКЦИИ ИЗ ТЗ ---
 
         // Функция ввода с клавиатуры
         currentEnv.declareConst("read", new JSBuiltInFunction() {

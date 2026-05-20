@@ -180,9 +180,15 @@ public class AstBuilder extends JSLiteBaseVisitor<AstNodes.AstNode> {
     public AstNodes.AstNode visitStringLiteral(JSLiteParser.StringLiteralContext ctx) {
         int line = ctx.getStart().getLine();
         int column = ctx.getStart().getCharPositionInLine();
-
-        String text = ctx.getText();
-        return new AstNodes.StringNode(text.substring(1, text.length() - 1), line, column); // Убираем кавычки
+        String raw = ctx.getText();
+        String content = raw.substring(1, raw.length() - 1);
+        // escape sequence
+        content = content.replace("\\n", "\n")
+                .replace("\\t", "\t")
+                .replace("\\r", "\r")
+                .replace("\\\"", "\"")
+                .replace("\\\\", "\\");
+        return new AstNodes.StringNode(content, line, column);
     }
 
     @Override

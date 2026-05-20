@@ -1,0 +1,49 @@
+function draw(width, height) {
+    if (width < 2) {
+        return "Kich thuoc phai >= 2";
+    }
+    if (height < 2) {
+        return "Kich thuoc phai >= 2";
+    }
+
+    let result = "";
+
+    // Hàng trên cùng
+    result = result + "*";
+    let i = 0;
+    while (i < width - 2) {
+        result = result + "-";
+        i = i + 1;
+    }
+    result = result + "*\n";
+
+    // Các hàng ở giữa
+    let row = 0;
+    while (row < height - 2) {
+        result = result + "|";
+        let j = 0;
+        while (j < width - 2) {
+            result = result + " ";
+            j = j + 1;
+        }
+        result = result + "|\n";
+        row = row + 1;
+    }
+
+    // Hàng dưới cùng
+    if (height > 1) {
+        result = result + "*";
+        let k = 0;
+        while (k < width - 2) {
+            result = result + "-";
+            k = k + 1;
+        }
+        result = result + "*";
+    }
+
+    return result;
+}
+
+print(draw(5, 5));
+print("---");
+print(draw(8, 4));
