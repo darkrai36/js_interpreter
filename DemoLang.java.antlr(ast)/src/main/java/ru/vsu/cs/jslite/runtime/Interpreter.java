@@ -16,11 +16,13 @@ import java.util.Map;
 public class Interpreter {
     private Environment currentEnv;
     private final JSObject globalThis;
+    private final Environment globalEnv;
 
     public Interpreter() {
         // Создаем глобальный scope (он является функцией/корнем по умолчанию)
         this.currentEnv = new Environment(null, true);
         this.globalThis = new JSObject(new LinkedHashMap<>());
+        this.globalEnv = this.currentEnv;
         setupBuiltIns();
     }
 
@@ -158,12 +160,10 @@ public class Interpreter {
         JSValue value = eval(node.value);
 
         if (node.target instanceof IdentNode) {
-            // Обычная переменная: x = 5
             String name = ((IdentNode) node.target).name;
             currentEnv.assign(name, value, node.getLine(), node.getColumn());
 
         } else if (node.target instanceof IndexNode) {
-            // Массив или объект по скобкам: arr[0] = 5 или obj["key"] = 5
             IndexNode indexNode = (IndexNode) node.target;
             JSValue targetObj = eval(indexNode.array);
             JSValue indexVal = eval(indexNode.index);
@@ -171,26 +171,36 @@ public class Interpreter {
             if (targetObj instanceof JSArray) {
                 int idx = (int) ((JSNumber) indexVal).value;
                 List<JSValue> list = ((JSArray) targetObj).elements;
-                // JS динамически расширяет массив, если индекс больше размера
                 while (list.size() <= idx) list.add(JSUndefined.INSTANCE);
                 list.set(idx, value);
             } else if (targetObj instanceof JSObject) {
                 ((JSObject) targetObj).properties.put(indexVal.asString(), value);
             } else {
-                throw new JSRuntimeException("Cannot assign to index of non-object", node.getLine(), node.getColumn());
+                throw new JSRuntimeException("Cannot assign to index of non-object",
+                        node.getLine(), node.getColumn());
             }
 
         } else if (node.target instanceof DotNode) {
-            // Объект по точке: obj.name = "Ivan"
             DotNode dotNode = (DotNode) node.target;
             JSValue targetObj = eval(dotNode.obj);
             if (targetObj instanceof JSObject) {
                 ((JSObject) targetObj).properties.put(dotNode.prop, value);
+
+                // nếu gán cho thuộc tính của global object, đồng bộ với global environment
+                if (targetObj == globalThis) {
+                    try {
+                        globalEnv.assign(dotNode.prop, value, node.getLine(), node.getColumn());
+                    } catch (JSRuntimeException e) {
+                        globalEnv.declareVar(dotNode.prop, value);
+                    }
+                }
             } else {
-                throw new JSRuntimeException("Cannot assign to property of non-object", node.getLine(), node.getColumn());
+                throw new JSRuntimeException("Cannot assign to property of non-object",
+                        node.getLine(), node.getColumn());
             }
         } else {
-            throw new JSRuntimeException("Invalid left-hand side in assignment", node.getLine(), node.getColumn());
+            throw new JSRuntimeException("Invalid left-hand side in assignment",
+                    node.getLine(), node.getColumn());
         }
 
         return value;

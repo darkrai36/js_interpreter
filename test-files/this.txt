@@ -8,3 +8,6 @@ let o = { f: f };
 
 o.f();
 f();
+
+print(o.a);
+print(a);
