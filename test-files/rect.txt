@@ -1,14 +1,13 @@
 function draw(width, height) {
     if (width < 2) {
-        return "Kich thuoc phai >= 2";
+        return "width must be >= 2";
     }
     if (height < 2) {
-        return "Kich thuoc phai >= 2";
+        return "height must be >= 2";
     }
 
     let result = "";
 
-    // Hàng trên cùng
     result = result + "*";
     let i = 0;
     while (i < width - 2) {
@@ -17,7 +16,6 @@ function draw(width, height) {
     }
     result = result + "*\n";
 
-    // Các hàng ở giữa
     let row = 0;
     while (row < height - 2) {
         result = result + "|";
@@ -30,7 +28,6 @@ function draw(width, height) {
         row = row + 1;
     }
 
-    // Hàng dưới cùng
     if (height > 1) {
         result = result + "*";
         let k = 0;
